@@ -1,0 +1,328 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Global Distribution | Premium Supply Solutions</title>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg-color: #0a0a0a;
+            --text-primary: #f5f5f7;
+            --text-secondary: #86868b;
+            --accent: #ffffff;
+            --border-color: rgba(255, 255, 255, 0.1);
+            --transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text-primary);
+            line-height: 1.5;
+            overflow-x: hidden;
+        }
+
+        a {
+            text-decoration: none;
+            color: inherit;
+        }
+
+        /* Header */
+        header {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 30px 60px;
+            z-index: 100;
+            backdrop-filter: blur(20px);
+            background: rgba(10, 10, 10, 0.7);
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .logo {
+            font-weight: 600;
+            font-size: 1.1rem;
+            letter-spacing: 0.15em;
+            text-transform: uppercase;
+        }
+
+        nav {
+            display: flex;
+            gap: 40px;
+        }
+
+        nav a {
+            font-size: 0.9rem;
+            color: var(--text-secondary);
+            transition: var(--transition);
+        }
+
+        nav a:hover {
+            color: var(--text-primary);
+        }
+
+        .contact-btn {
+            padding: 10px 24px;
+            border: 1px solid var(--border-color);
+            border-radius: 50px;
+            font-size: 0.85rem;
+            font-weight: 500;
+            transition: var(--transition);
+        }
+
+        .contact-btn:hover {
+            background: var(--accent);
+            color: var(--bg-color);
+            border-color: var(--accent);
+        }
+
+        /* Hero Section */
+        section {
+            padding: 160px 60px 100px;
+            max-width: 1440px;
+            margin: 0 auto;
+        }
+
+        .hero {
+            min-height: 90vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+        }
+
+        .hero h1 {
+            font-size: clamp(3rem, 6vw, 6rem);
+            font-weight: 300;
+            line-height: 1.1;
+            letter-spacing: -0.03em;
+            max-width: 1000px;
+            margin-bottom: 30px;
+        }
+
+        .hero h1 span {
+            color: var(--text-secondary);
+        }
+
+        .hero-desc {
+            font-size: 1.2rem;
+            color: var(--text-secondary);
+            max-width: 500px;
+            margin-bottom: 50px;
+            font-weight: 300;
+        }
+
+        /* Stats Grid */
+        .stats {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 40px;
+            padding: 80px 0;
+            border-top: 1px solid var(--border-color);
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .stat-item h3 {
+            font-size: 3rem;
+            font-weight: 300;
+            margin-bottom: 10px;
+            letter-spacing: -0.02em;
+        }
+
+        .stat-item p {
+            color: var(--text-secondary);
+            font-size: 0.95rem;
+        }
+
+        /* Categories Section */
+        .section-title {
+            font-size: 2rem;
+            font-weight: 300;
+            margin-bottom: 60px;
+            letter-spacing: -0.02em;
+        }
+
+        .categories-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 30px;
+        }
+
+        .category-card {
+            background: #121212;
+            border: 1px solid var(--border-color);
+            padding: 50px;
+            border-radius: 12px;
+            transition: var(--transition);
+            position: relative;
+            overflow: hidden;
+            min-height: 320px;
+            display: flex;
+            flex-direction: column;
+            justify-content: flex-end;
+        }
+
+        .category-card:hover {
+            border-color: rgba(255, 255, 255, 0.3);
+            transform: translateY(-5px);
+        }
+
+        .category-card h4 {
+            font-size: 1.5rem;
+            font-weight: 400;
+            margin-bottom: 10px;
+        }
+
+        .category-card p {
+            color: var(--text-secondary);
+            font-size: 0.95rem;
+        }
+
+        /* Footer / Form */
+        .footer-section {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 80px;
+            padding-top: 100px;
+            padding-bottom: 100px;
+        }
+
+        .footer-left h2 {
+            font-size: 3rem;
+            font-weight: 300;
+            letter-spacing: -0.02em;
+            margin-bottom: 20px;
+        }
+
+        .footer-left p {
+            color: var(--text-secondary);
+            margin-bottom: 30px;
+        }
+
+        .form-group {
+            display: flex;
+            gap: 15px;
+        }
+
+        input {
+            flex: 1;
+            background: #121212;
+            border: 1px solid var(--border-color);
+            padding: 16px 20px;
+            border-radius: 8px;
+            color: var(--text-primary);
+            font-family: inherit;
+            font-size: 0.95krem;
+            outline: none;
+            transition: var(--transition);
+        }
+
+        input:focus {
+            border-color: var(--text-primary);
+        }
+
+        button {
+            background: var(--accent);
+            color: var(--bg-color);
+            border: none;
+            padding: 0 30px;
+            border-radius: 8px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: var(--transition);
+        }
+
+        button:hover {
+            opacity: 0.9;
+        }
+
+        @media (max-width: 900px) {
+            header { padding: 20px 30px; }
+            nav { display: none; }
+            section { padding: 120px 20px 60px; }
+            .stats, .categories-grid, .footer-section { grid-template-columns: 1fr; gap: 30px; }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Шапка сайта -->
+    <header>
+        <div class="logo">Nexus.Dist</div>
+        <nav>
+            <a href="#about">О компании</a>
+            <a href="#categories">Каталог</a>
+            <a href="#logistics">Логистика</a>
+            <a href="#partners">Партнерам</a>
+        </nav>
+        <a href="#contact" class="contact-btn">Связаться</a>
+    </header>
+
+    <!-- Главный экран -->
+    <section class="hero">
+        <h1>Масштабная дистрибуция. <span>Безупречная точность поставок.</span></h1>
+        <p class="hero-desc">Управляющие цепочками поставок нового поколения. Доставка премиальных товаров по всему миру с гарантией эффективности на каждом этапе.</p>
+        <a href="#contact" class="contact-btn" style="width: fit-content; padding: 16px 36px;">Обсудить сотрудничество</a>
+    </section>
+
+    <!-- Статистика -->
+    <section>
+        <div class="stats">
+            <div class="stat-item">
+                <h3>15+</h3>
+                <p>Лет успешной работы на международном рынке дистрибуции</p>
+            </div>
+            <div class="stat-item">
+                <h3>45 млн</h3>
+                <p>Единиц продукции ежегодно доставляется точно в срок</p>
+            </div>
+            <div class="stat-item">
+                <h3>99.8%</h3>
+                <p>Показатель надежности логистических цепочек</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Категории / Направления -->
+    <section id="categories">
+        <h2 class="section-title">Направления поставок</h2>
+        <div class="categories-grid">
+            <div class="category-card">
+                <h4>Напитки и FMCG</h4>
+                <p>Широкий пул эксклюзивных брендов и стабильные каналы сбыта для ритейла.</p>
+            </div>
+            <div class="category-card">
+                <h4>Премиум-товары</h4>
+                <p>Элитные категории продукции с соблюдением строгих стандартов хранения и транспортировки.</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Секция связи -->
+    <section id="contact">
+        <div class="footer-section">
+            <div class="footer-left">
+                <h2>Начнем сотрудничество?</h2>
+                <p>Оставьте свои контакты, и наш менеджер свяжется с вами для обсуждения деталей оптовых поставок.</p>
+            </div>
+            <div class="footer-right">
+                <form class="form-group" onsubmit="event.preventDefault(); alert('Спасибо! Заявка успешно отправлена.');">
+                    <input type="email" placeholder="Ваш корпоративный email" required>
+                    <button type="submit">Отправить</button>
+                </form>
+            </div>
+        </div>
+    </section>
+
+</body>
+</html>
