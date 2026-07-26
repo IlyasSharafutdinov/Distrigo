@@ -1,328 +1,816 @@
 <!DOCTYPE html>
-<html lang="ru">
+<html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Global Distribution | Premium Supply Solutions</title>
-    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
-    <style>
-        :root {
-            --bg-color: #0a0a0a;
-            --text-primary: #f5f5f7;
-            --text-secondary: #86868b;
-            --accent: #ffffff;
-            --border-color: rgba(255, 255, 255, 0.1);
-            --transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
-        }
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Distrigo</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,600&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#F7F4EF;
+    --ink:#17140F;
+    --wood:#B08A64;
+    --wood-deep:#8C6A48;
+    --line: rgba(23,20,15,0.14);
+    --line-soft: rgba(23,20,15,0.08);
+    --dur: 900ms;
+  }
 
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
+  *{margin:0;padding:0;box-sizing:border-box;}
 
-        body {
-            font-family: 'Plus Jakarta Sans', sans-serif;
-            background-color: var(--bg-color);
-            color: var(--text-primary);
-            line-height: 1.5;
-            overflow-x: hidden;
-        }
+  html{scroll-behavior:smooth;}
 
-        a {
-            text-decoration: none;
-            color: inherit;
-        }
+  body{
+    background:var(--bg);
+    color:var(--ink);
+    font-family:'Fraunces', serif;
+    font-optical-sizing:auto;
+    -webkit-font-smoothing:antialiased;
+    overflow-x:hidden;
+  }
 
-        /* Header */
-        header {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            padding: 30px 60px;
-            z-index: 100;
-            backdrop-filter: blur(20px);
-            background: rgba(10, 10, 10, 0.7);
-            border-bottom: 1px solid var(--border-color);
-        }
+  @media (prefers-reduced-motion: reduce){
+    *{animation-duration:0.01ms !important; transition-duration:0.01ms !important;}
+  }
 
-        .logo {
-            font-weight: 600;
-            font-size: 1.1rem;
-            letter-spacing: 0.15em;
-            text-transform: uppercase;
-        }
+  ::selection{background:var(--wood); color:var(--bg);}
 
-        nav {
-            display: flex;
-            gap: 40px;
-        }
+  /* ---------- scroll gallery ---------- */
+  .reel{
+    height:100vh;
+    overflow-y:scroll;
+    scroll-snap-type:y mandatory;
+  }
+  section{
+    scroll-snap-align:start;
+    min-height:100vh;
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+    justify-content:center;
+    position:relative;
+    padding:8vh 6vw;
+  }
 
-        nav a {
-            font-size: 0.9rem;
-            color: var(--text-secondary);
-            transition: var(--transition);
-        }
+  /* ---------- top chrome ---------- */
+  .chrome{
+    position:fixed;
+    top:0; left:0; right:0;
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    padding:34px 5vw;
+    z-index:50;
+    pointer-events:none;
+  }
+  .chrome > *{pointer-events:auto;}
 
-        nav a:hover {
-            color: var(--text-primary);
-        }
+  .wordmark{
+    font-weight:600;
+    font-size:15px;
+    letter-spacing:0.28em;
+    text-decoration:none;
+    color:var(--ink);
+    opacity:0;
+    transition:opacity var(--dur) ease;
+  }
+  .wordmark.show{opacity:1;}
 
-        .contact-btn {
-            padding: 10px 24px;
-            border: 1px solid var(--border-color);
-            border-radius: 50px;
-            font-size: 0.85rem;
-            font-weight: 500;
-            transition: var(--transition);
-        }
+  .icon-btn{
+    background:none;
+    border:none;
+    cursor:pointer;
+    color:var(--ink);
+    width:34px; height:34px;
+    display:flex; align-items:center; justify-content:center;
+    opacity:0.85;
+    transition:opacity 300ms ease, transform 300ms ease;
+  }
+  .icon-btn:hover{opacity:1; transform:translateY(-1px);}
+  .icon-btn svg{width:19px; height:19px;}
 
-        .contact-btn:hover {
-            background: var(--accent);
-            color: var(--bg-color);
-            border-color: var(--accent);
-        }
+  .chrome-right{display:flex; align-items:center; gap:22px;}
 
-        /* Hero Section */
-        section {
-            padding: 160px 60px 100px;
-            max-width: 1440px;
-            margin: 0 auto;
-        }
+  /* search */
+  .search-wrap{
+    position:fixed;
+    top:30px; left:50%;
+    transform:translateX(-50%) scaleX(0.4);
+    width:min(480px, 70vw);
+    opacity:0;
+    pointer-events:none;
+    transition:opacity 420ms ease, transform 420ms cubic-bezier(.25,.8,.25,1);
+    z-index:60;
+  }
+  .search-wrap.open{
+    opacity:1;
+    transform:translateX(-50%) scaleX(1);
+    pointer-events:auto;
+  }
+  .search-wrap input{
+    width:100%;
+    border:none;
+    background:none;
+    outline:none;
+    font-family:'Fraunces', serif;
+    font-size:16px;
+    letter-spacing:0.02em;
+    color:var(--ink);
+    padding:6px 2px 10px;
+    border-bottom:1px solid var(--ink);
+  }
+  .search-wrap input::placeholder{color:rgba(23,20,15,0.4);}
 
-        .hero {
-            min-height: 90vh;
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-        }
+  /* ---------- side category dock ---------- */
+  .dock{
+    position:fixed;
+    right:5vw; top:50%;
+    transform:translateY(-50%);
+    display:flex;
+    flex-direction:column;
+    gap:26px;
+    z-index:45;
+    opacity:0;
+    transition:opacity var(--dur) ease;
+  }
+  .dock.show{opacity:1;}
+  .dock a{
+    width:38px; height:38px;
+    display:flex; align-items:center; justify-content:center;
+    color:var(--ink);
+    opacity:0.55;
+    transition:opacity 300ms ease, transform 300ms ease;
+    position:relative;
+  }
+  .dock a:hover{opacity:1; transform:translateX(-3px);}
+  .dock a svg{width:26px; height:26px;}
+  .dock a .tip{
+    position:absolute;
+    right:48px; top:50%; transform:translateY(-50%);
+    font-size:11px; letter-spacing:0.14em; text-transform:uppercase;
+    white-space:nowrap;
+    opacity:0;
+    transition:opacity 250ms ease;
+  }
+  .dock a:hover .tip{opacity:0.7;}
 
-        .hero h1 {
-            font-size: clamp(3rem, 6vw, 6rem);
-            font-weight: 300;
-            line-height: 1.1;
-            letter-spacing: -0.03em;
-            max-width: 1000px;
-            margin-bottom: 30px;
-        }
+  @media (max-width: 760px){
+    .dock{
+      right:auto; left:50%; top:auto; bottom:26px;
+      transform:translateX(-50%);
+      flex-direction:row;
+      gap:34px;
+      background:rgba(247,244,239,0.85);
+      backdrop-filter:blur(6px);
+      padding:10px 22px;
+      border-radius:999px;
+    }
+    .dock a .tip{display:none;}
+  }
 
-        .hero h1 span {
-            color: var(--text-secondary);
-        }
+  /* ---------- hero ---------- */
+  .hero{
+    text-align:center;
+  }
+  .hero .mark{
+    font-weight:600;
+    font-size:clamp(38px, 8vw, 74px);
+    letter-spacing:0.16em;
+    line-height:1;
+  }
+  .hero .tagline{
+    margin-top:26px;
+    font-weight:400;
+    font-style:italic;
+    font-size:clamp(15px,2vw,18px);
+    color:rgba(23,20,15,0.62);
+    letter-spacing:0.01em;
+  }
+  .down{
+    position:absolute;
+    bottom:7vh; left:50%;
+    transform:translateX(-50%);
+    color:var(--ink);
+    opacity:0.5;
+    animation:breathe 3.6s ease-in-out infinite;
+  }
+  .down svg{width:20px; height:20px;}
+  @keyframes breathe{
+    0%,100%{transform:translate(-50%,0); opacity:0.35;}
+    50%{transform:translate(-50%,10px); opacity:0.7;}
+  }
 
-        .hero-desc {
-            font-size: 1.2rem;
-            color: var(--text-secondary);
-            max-width: 500px;
-            margin-bottom: 50px;
-            font-weight: 300;
-        }
+  /* ---------- product sections ---------- */
+  .product{
+    width:100%;
+    max-width:980px;
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+    gap:0;
+  }
+  .stage{
+    width:min(60vw, 520px);
+    aspect-ratio:1/1;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    opacity:0;
+    transform:scale(0.94);
+    transition:opacity 1100ms cubic-bezier(.2,.7,.2,1), transform 1100ms cubic-bezier(.2,.7,.2,1);
+  }
+  .stage.in{opacity:1; transform:scale(1);}
+  .stage svg{width:100%; height:100%; stroke:var(--ink); fill:none; stroke-width:1.3;}
+  .stage svg .wood-fill{fill:var(--wood); stroke:none; opacity:0.16;}
 
-        /* Stats Grid */
-        .stats {
-            display: grid;
-            grid-template-columns: repeat(3, 1fr);
-            gap: 40px;
-            padding: 80px 0;
-            border-top: 1px solid var(--border-color);
-            border-bottom: 1px solid var(--border-color);
-        }
+  .p-info{
+    margin-top:6vh;
+    text-align:center;
+    opacity:0;
+    transform:translateY(10px);
+    transition:opacity 900ms ease 150ms, transform 900ms ease 150ms;
+  }
+  .p-info.in{opacity:1; transform:translateY(0);}
+  .p-name{
+    font-weight:600;
+    font-size:clamp(22px,3vw,30px);
+    letter-spacing:0.01em;
+  }
+  .p-meta{
+    margin-top:10px;
+    font-size:14px;
+    color:rgba(23,20,15,0.55);
+    letter-spacing:0.03em;
+  }
+  .p-price{
+    margin-top:4px;
+    font-size:15px;
+    letter-spacing:0.03em;
+  }
+  .p-add{
+    margin-top:26px;
+    background:var(--ink);
+    color:var(--bg);
+    border:none;
+    padding:14px 40px;
+    font-family:'Fraunces', serif;
+    font-size:13px;
+    letter-spacing:0.18em;
+    text-transform:uppercase;
+    cursor:pointer;
+    transition:background 350ms ease, transform 250ms ease, letter-spacing 350ms ease;
+  }
+  .p-add:hover{background:var(--wood-deep); letter-spacing:0.24em;}
+  .p-add:active{transform:scale(0.97);}
 
-        .stat-item h3 {
-            font-size: 3rem;
-            font-weight: 300;
-            margin-bottom: 10px;
-            letter-spacing: -0.02em;
-        }
+  .index-tag{
+    position:absolute;
+    top:8vh; left:6vw;
+    font-size:12px;
+    letter-spacing:0.2em;
+    color:rgba(23,20,15,0.35);
+    text-transform:uppercase;
+  }
 
-        .stat-item p {
-            color: var(--text-secondary);
-            font-size: 0.95rem;
-        }
+  /* ---------- about / closing ---------- */
+  .about{
+    text-align:center;
+    max-width:640px;
+  }
+  .about p{
+    font-weight:400;
+    font-style:italic;
+    font-size:clamp(20px,3vw,28px);
+    line-height:1.5;
+  }
 
-        /* Categories Section */
-        .section-title {
-            font-size: 2rem;
-            font-weight: 300;
-            margin-bottom: 60px;
-            letter-spacing: -0.02em;
-        }
+  footer{
+    min-height:auto;
+    padding:8vh 6vw 6vh;
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+    gap:10px;
+  }
+  footer .fmark{
+    font-weight:600;
+    letter-spacing:0.28em;
+    font-size:13px;
+  }
+  footer .flink{
+    font-size:11px;
+    letter-spacing:0.08em;
+    color:rgba(23,20,15,0.4);
+    text-decoration:none;
+  }
+  footer .flink:hover{color:rgba(23,20,15,0.7);}
 
-        .categories-grid {
-            display: grid;
-            grid-template-columns: repeat(2, 1fr);
-            gap: 30px;
-        }
+  /* ---------- cart drawer ---------- */
+  .scrim{
+    position:fixed; inset:0;
+    background:rgba(23,20,15,0.25);
+    opacity:0; pointer-events:none;
+    transition:opacity 400ms ease;
+    z-index:70;
+  }
+  .scrim.open{opacity:1; pointer-events:auto;}
 
-        .category-card {
-            background: #121212;
-            border: 1px solid var(--border-color);
-            padding: 50px;
-            border-radius: 12px;
-            transition: var(--transition);
-            position: relative;
-            overflow: hidden;
-            min-height: 320px;
-            display: flex;
-            flex-direction: column;
-            justify-content: flex-end;
-        }
+  .drawer{
+    position:fixed;
+    top:0; right:0; bottom:0;
+    width:min(440px, 92vw);
+    background:var(--bg);
+    z-index:80;
+    transform:translateX(100%);
+    transition:transform 520ms cubic-bezier(.22,.8,.2,1);
+    display:flex; flex-direction:column;
+    padding:44px 40px;
+    overflow-y:auto;
+  }
+  .drawer.open{transform:translateX(0);}
 
-        .category-card:hover {
-            border-color: rgba(255, 255, 255, 0.3);
-            transform: translateY(-5px);
-        }
+  .drawer-head{
+    display:flex; justify-content:space-between; align-items:center;
+    margin-bottom:40px;
+  }
+  .drawer-head h2{
+    font-weight:600; font-size:18px; letter-spacing:0.12em; text-transform:uppercase;
+  }
+  .drawer-close{
+    background:none; border:none; cursor:pointer; color:var(--ink);
+    font-size:20px; line-height:1; opacity:0.6;
+  }
+  .drawer-close:hover{opacity:1;}
 
-        .category-card h4 {
-            font-size: 1.5rem;
-            font-weight: 400;
-            margin-bottom: 10px;
-        }
+  .cart-line{
+    display:flex; justify-content:space-between; align-items:flex-start;
+    padding:20px 0;
+    border-bottom:1px solid var(--line-soft);
+    gap:14px;
+  }
+  .cart-line .cl-name{font-weight:600; font-size:16px;}
+  .cart-line .cl-meta{font-size:12px; color:rgba(23,20,15,0.5); margin-top:4px;}
+  .cart-line .cl-qty{
+    display:flex; align-items:center; gap:12px; margin-top:10px; font-size:14px;
+  }
+  .cl-qty button{
+    background:none; border:none; cursor:pointer; color:var(--ink); font-size:15px; opacity:0.6;
+  }
+  .cl-qty button:hover{opacity:1;}
+  .cl-remove{
+    background:none; border:none; cursor:pointer;
+    font-size:11px; letter-spacing:0.05em; color:rgba(23,20,15,0.4);
+    text-decoration:underline;
+  }
+  .cl-price{font-size:15px; white-space:nowrap;}
 
-        .category-card p {
-            color: var(--text-secondary);
-            font-size: 0.95rem;
-        }
+  .empty-note{
+    color:rgba(23,20,15,0.45);
+    font-style:italic;
+    padding:30px 0;
+  }
 
-        /* Footer / Form */
-        .footer-section {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 80px;
-            padding-top: 100px;
-            padding-bottom: 100px;
-        }
+  .cart-total{
+    display:flex; justify-content:space-between;
+    margin-top:26px; padding-top:20px;
+    border-top:1px solid var(--ink);
+    font-weight:600; font-size:16px;
+  }
 
-        .footer-left h2 {
-            font-size: 3rem;
-            font-weight: 300;
-            letter-spacing: -0.02em;
-            margin-bottom: 20px;
-        }
+  .cart-actions{margin-top:34px;}
+  .cart-actions .p-add{width:100%;}
 
-        .footer-left p {
-            color: var(--text-secondary);
-            margin-bottom: 30px;
-        }
+  /* checkout inline form */
+  .checkout-form{margin-top:30px; display:none; flex-direction:column; gap:22px;}
+  .checkout-form.open{display:flex;}
+  .field{position:relative;}
+  .field input{
+    width:100%;
+    border:none;
+    border-bottom:1px solid var(--line);
+    background:none;
+    outline:none;
+    font-family:'Fraunces', serif;
+    font-size:15px;
+    padding:8px 0 10px;
+    color:var(--ink);
+    transition:border-color 300ms ease;
+  }
+  .field input:focus{border-color:var(--ink);}
+  .field label{
+    position:absolute; left:0; top:8px;
+    font-size:15px; color:rgba(23,20,15,0.4);
+    transition:all 220ms ease;
+    pointer-events:none;
+  }
+  .field input:focus + label,
+  .field input:not(:placeholder-shown) + label{
+    top:-14px; font-size:11px; letter-spacing:0.06em;
+  }
+  .field-row{display:flex; gap:16px;}
+  .field-row .field{flex:1;}
 
-        .form-group {
-            display: flex;
-            gap: 15px;
-        }
+  .confirm{
+    display:none;
+    text-align:center;
+    padding:60px 0;
+    opacity:0;
+    transition:opacity 900ms ease;
+  }
+  .confirm.show{display:block; opacity:1;}
+  .confirm p:first-child{font-weight:600; font-size:19px; letter-spacing:0.02em;}
+  .confirm p:last-child{margin-top:10px; font-size:13px; color:rgba(23,20,15,0.5);}
 
-        input {
-            flex: 1;
-            background: #121212;
-            border: 1px solid var(--border-color);
-            padding: 16px 20px;
-            border-radius: 8px;
-            color: var(--text-primary);
-            font-family: inherit;
-            font-size: 0.95krem;
-            outline: none;
-            transition: var(--transition);
-        }
-
-        input:focus {
-            border-color: var(--text-primary);
-        }
-
-        button {
-            background: var(--accent);
-            color: var(--bg-color);
-            border: none;
-            padding: 0 30px;
-            border-radius: 8px;
-            font-weight: 600;
-            cursor: pointer;
-            transition: var(--transition);
-        }
-
-        button:hover {
-            opacity: 0.9;
-        }
-
-        @media (max-width: 900px) {
-            header { padding: 20px 30px; }
-            nav { display: none; }
-            section { padding: 120px 20px 60px; }
-            .stats, .categories-grid, .footer-section { grid-template-columns: 1fr; gap: 30px; }
-        }
-    </style>
+</style>
 </head>
 <body>
 
-    <!-- Шапка сайта -->
-    <header>
-        <div class="logo">Nexus.Dist</div>
-        <nav>
-            <a href="#about">О компании</a>
-            <a href="#categories">Каталог</a>
-            <a href="#logistics">Логистика</a>
-            <a href="#partners">Партнерам</a>
-        </nav>
-        <a href="#contact" class="contact-btn">Связаться</a>
-    </header>
+<div class="chrome">
+  <a href="#hero" class="wordmark" id="wordmark">DISTRIGO</a>
+  <div class="chrome-right">
+    <button class="icon-btn" id="searchToggle" aria-label="Search">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4"><circle cx="10.5" cy="10.5" r="6.5"/><line x1="15.3" y1="15.3" x2="21" y2="21"/></svg>
+    </button>
+    <button class="icon-btn" id="cartToggle" aria-label="Cart">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4"><path d="M6 8h12l-1 12H7L6 8z"/><path d="M9 8V6a3 3 0 0 1 6 0v2"/></svg>
+    </button>
+  </div>
+</div>
 
-    <!-- Главный экран -->
-    <section class="hero">
-        <h1>Масштабная дистрибуция. <span>Безупречная точность поставок.</span></h1>
-        <p class="hero-desc">Управляющие цепочками поставок нового поколения. Доставка премиальных товаров по всему миру с гарантией эффективности на каждом этапе.</p>
-        <a href="#contact" class="contact-btn" style="width: fit-content; padding: 16px 36px;">Обсудить сотрудничество</a>
-    </section>
+<div class="search-wrap" id="searchWrap">
+  <input type="text" id="searchInput" placeholder="Search" autocomplete="off">
+</div>
 
-    <!-- Статистика -->
-    <section>
-        <div class="stats">
-            <div class="stat-item">
-                <h3>15+</h3>
-                <p>Лет успешной работы на международном рынке дистрибуции</p>
-            </div>
-            <div class="stat-item">
-                <h3>45 млн</h3>
-                <p>Единиц продукции ежегодно доставляется точно в срок</p>
-            </div>
-            <div class="stat-item">
-                <h3>99.8%</h3>
-                <p>Показатель надежности логистических цепочек</p>
-            </div>
+<nav class="dock" id="dock">
+  <a href="#chairs"><span class="tip">Chairs</span>
+    <svg viewBox="0 0 100 100" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M28 20v34M72 20v54M28 54h44M28 54l-4 26M72 74l4 6"/></svg>
+  </a>
+  <a href="#tables"><span class="tip">Tables</span>
+    <svg viewBox="0 0 100 100" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M14 34h72M22 34v42M78 34v42"/></svg>
+  </a>
+  <a href="#wardrobes"><span class="tip">Wardrobes</span>
+    <svg viewBox="0 0 100 100" fill="none" stroke="currentColor" stroke-width="2.2"><rect x="24" y="14" width="52" height="72"/><line x1="50" y1="14" x2="50" y2="86"/><circle cx="45" cy="50" r="1.6" fill="currentColor" stroke="none"/><circle cx="55" cy="50" r="1.6" fill="currentColor" stroke="none"/></svg>
+  </a>
+</nav>
+
+<div class="reel" id="reel">
+
+  <section class="hero" id="hero">
+    <div class="mark">DISTRIGO</div>
+    <div class="tagline">Furniture speaks for itself.</div>
+    <div class="down">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.3"><path d="M12 4v16M5 13l7 7 7-7"/></svg>
+    </div>
+  </section>
+
+  <!-- CHAIR 1 -->
+  <section class="product" id="chairs" data-cat="chairs">
+    <span class="index-tag">Chairs</span>
+    <div class="stage">
+      <svg viewBox="0 0 200 200">
+        <path d="M55 40 L55 105 M145 40 L145 160" stroke-linecap="round"/>
+        <path d="M55 105 L145 105" stroke-linecap="round"/>
+        <path d="M55 105 L48 160 M145 105 L152 160" stroke-linecap="round"/>
+        <path d="M48 160 L48 178 M152 160 L152 178" stroke-linecap="round"/>
+        <path d="M55 105 L52 178" stroke-linecap="round"/>
+        <path d="M55 55 L145 55" stroke-linecap="round" opacity="0.5"/>
+        <path d="M55 75 L145 75" stroke-linecap="round" opacity="0.5"/>
+      </svg>
+    </div>
+    <div class="p-info">
+      <div class="p-name" data-name>Oak Dining Chair</div>
+      <div class="p-meta" data-meta>Solid oak · 46 × 52 × 80 cm</div>
+      <div class="p-price" data-price>$340</div>
+      <button class="p-add" data-add>Add</button>
+    </div>
+  </section>
+
+  <!-- CHAIR 2 -->
+  <section class="product" data-cat="chairs">
+    <span class="index-tag">Chairs</span>
+    <div class="stage">
+      <svg viewBox="0 0 200 200">
+        <path d="M40 95 Q40 45 100 45 Q160 45 160 95" stroke-linecap="round"/>
+        <path d="M40 95 L36 150 Q36 165 52 165 L60 165 L64 130" stroke-linecap="round" stroke-linejoin="round"/>
+        <path d="M160 95 L164 150 Q164 165 148 165 L140 165 L136 130" stroke-linecap="round" stroke-linejoin="round"/>
+        <path d="M64 130 Q100 145 136 130" stroke-linecap="round"/>
+        <path d="M52 165 L50 180 M148 165 L150 180" stroke-linecap="round"/>
+        <path d="M78 180 L76 165 M122 180 L124 165" stroke-linecap="round"/>
+      </svg>
+    </div>
+    <div class="p-info">
+      <div class="p-name" data-name>Wool Lounge Chair</div>
+      <div class="p-meta" data-meta>Walnut frame, wool upholstery · 70 × 75 × 78 cm</div>
+      <div class="p-price" data-price>$890</div>
+      <button class="p-add" data-add>Add</button>
+    </div>
+  </section>
+
+  <!-- TABLE 1 -->
+  <section class="product" id="tables" data-cat="tables">
+    <span class="index-tag">Tables</span>
+    <div class="stage">
+      <svg viewBox="0 0 200 200">
+        <path d="M20 70 L180 70 L180 78 L20 78 Z" stroke-linecap="round" stroke-linejoin="round"/>
+        <path d="M32 78 L28 160 M168 78 L172 160" stroke-linecap="round"/>
+        <path d="M28 160 L28 175 M172 160 L172 175" stroke-linecap="round"/>
+      </svg>
+    </div>
+    <div class="p-info">
+      <div class="p-name" data-name>Long Oak Table</div>
+      <div class="p-meta" data-meta>Solid oak · 220 × 90 × 75 cm</div>
+      <div class="p-price" data-price>$2,150</div>
+      <button class="p-add" data-add>Add</button>
+    </div>
+  </section>
+
+  <!-- TABLE 2 -->
+  <section class="product" data-cat="tables">
+    <span class="index-tag">Tables</span>
+    <div class="stage">
+      <svg viewBox="0 0 200 200">
+        <ellipse cx="100" cy="72" rx="58" ry="12"/>
+        <path d="M52 76 L58 150 M148 76 L142 150" stroke-linecap="round"/>
+        <path d="M58 150 L58 165 M142 150 L142 165" stroke-linecap="round"/>
+        <path d="M62 110 L138 110" opacity="0.5"/>
+      </svg>
+    </div>
+    <div class="p-info">
+      <div class="p-name" data-name>Round Side Table</div>
+      <div class="p-meta" data-meta>Walnut · Ø45 × 48 cm</div>
+      <div class="p-price" data-price>$410</div>
+      <button class="p-add" data-add>Add</button>
+    </div>
+  </section>
+
+  <!-- WARDROBE 1 -->
+  <section class="product" id="wardrobes" data-cat="wardrobes">
+    <span class="index-tag">Wardrobes</span>
+    <div class="stage">
+      <svg viewBox="0 0 200 200">
+        <rect x="45" y="24" width="110" height="156" stroke-linejoin="round"/>
+        <line x1="100" y1="24" x2="100" y2="180"/>
+        <circle cx="90" cy="100" r="2" fill="currentColor" stroke="none"/>
+        <circle cx="110" cy="100" r="2" fill="currentColor" stroke="none"/>
+      </svg>
+    </div>
+    <div class="p-info">
+      <div class="p-name" data-name>Wardrobe Line</div>
+      <div class="p-meta" data-meta>Oak veneer · 120 × 60 × 200 cm</div>
+      <div class="p-price" data-price>$1,780</div>
+      <button class="p-add" data-add>Add</button>
+    </div>
+  </section>
+
+  <!-- WARDROBE 2 -->
+  <section class="product" data-cat="wardrobes">
+    <span class="index-tag">Wardrobes</span>
+    <div class="stage">
+      <svg viewBox="0 0 200 200">
+        <rect x="30" y="20" width="140" height="160" stroke-linejoin="round"/>
+        <line x1="76" y1="20" x2="76" y2="180"/>
+        <line x1="124" y1="20" x2="124" y2="180"/>
+        <circle cx="68" cy="98" r="2" fill="currentColor" stroke="none"/>
+        <circle cx="84" cy="98" r="2" fill="currentColor" stroke="none"/>
+        <circle cx="132" cy="98" r="2" fill="currentColor" stroke="none"/>
+      </svg>
+    </div>
+    <div class="p-info">
+      <div class="p-name" data-name>Wardrobe Wide</div>
+      <div class="p-meta" data-meta>Walnut · 180 × 60 × 210 cm</div>
+      <div class="p-price" data-price>$2,640</div>
+      <button class="p-add" data-add>Add</button>
+    </div>
+  </section>
+
+  <section class="about">
+    <p>Objects made to be used, not explained.</p>
+  </section>
+
+  <footer>
+    <div class="fmark">DISTRIGO</div>
+    <a class="flink" href="#hero">back to top</a>
+  </footer>
+
+</div>
+
+<div class="scrim" id="scrim"></div>
+<div class="drawer" id="drawer">
+  <div class="drawer-head">
+    <h2>Cart</h2>
+    <button class="drawer-close" id="drawerClose">&times;</button>
+  </div>
+
+  <div id="cartLines"></div>
+  <div class="cart-total" id="cartTotal" style="display:none;">
+    <span>Total</span><span id="cartTotalValue">$0</span>
+  </div>
+
+  <div class="cart-actions" id="cartActions" style="display:none;">
+    <button class="p-add" id="checkoutBtn">Checkout</button>
+  </div>
+
+  <form class="checkout-form" id="checkoutForm">
+    <div class="field">
+      <input type="text" placeholder=" " required>
+      <label>Full name</label>
+    </div>
+    <div class="field">
+      <input type="text" placeholder=" " required>
+      <label>Address</label>
+    </div>
+    <div class="field-row">
+      <div class="field">
+        <input type="text" placeholder=" " required>
+        <label>City</label>
+      </div>
+      <div class="field">
+        <input type="text" placeholder=" " required>
+        <label>Postal code</label>
+      </div>
+    </div>
+    <div class="field">
+      <input type="text" placeholder=" " required>
+      <label>Card number</label>
+    </div>
+    <div class="field-row">
+      <div class="field">
+        <input type="text" placeholder=" " required>
+        <label>Expiry</label>
+      </div>
+      <div class="field">
+        <input type="text" placeholder=" " required>
+        <label>CVC</label>
+      </div>
+    </div>
+    <button type="submit" class="p-add">Place order</button>
+  </form>
+
+  <div class="confirm" id="confirm">
+    <p>Order received.</p>
+    <p>Distrigo will be in touch about delivery.</p>
+  </div>
+</div>
+
+<script>
+  // ---- reveal on scroll ----
+  const stages = document.querySelectorAll('.stage');
+  const infos = document.querySelectorAll('.p-info');
+  const io = new IntersectionObserver((entries)=>{
+    entries.forEach(e=>{
+      if(e.isIntersecting){
+        e.target.classList.add('in');
+      }
+    });
+  }, {threshold:0.4});
+  stages.forEach(s=>io.observe(s));
+  infos.forEach(s=>io.observe(s));
+
+  // wordmark + dock appear after leaving hero
+  const hero = document.getElementById('hero');
+  const wordmark = document.getElementById('wordmark');
+  const dock = document.getElementById('dock');
+  const heroObs = new IntersectionObserver((entries)=>{
+    entries.forEach(e=>{
+      if(e.isIntersecting){
+        wordmark.classList.remove('show');
+        dock.classList.remove('show');
+      } else {
+        wordmark.classList.add('show');
+        dock.classList.add('show');
+      }
+    });
+  }, {threshold:0.6});
+  heroObs.observe(hero);
+
+  // ---- search ----
+  const searchToggle = document.getElementById('searchToggle');
+  const searchWrap = document.getElementById('searchWrap');
+  const searchInput = document.getElementById('searchInput');
+  searchToggle.addEventListener('click', ()=>{
+    searchWrap.classList.toggle('open');
+    if(searchWrap.classList.contains('open')) searchInput.focus();
+  });
+  searchInput.addEventListener('input', ()=>{
+    const q = searchInput.value.trim().toLowerCase();
+    document.querySelectorAll('.product').forEach(sec=>{
+      const name = sec.querySelector('[data-name]').textContent.toLowerCase();
+      sec.style.display = (!q || name.includes(q)) ? '' : 'none';
+    });
+  });
+
+  // ---- cart ----
+  let cart = [];
+  const drawer = document.getElementById('drawer');
+  const scrim = document.getElementById('scrim');
+  const cartToggle = document.getElementById('cartToggle');
+  const drawerClose = document.getElementById('drawerClose');
+  const cartLines = document.getElementById('cartLines');
+  const cartTotal = document.getElementById('cartTotal');
+  const cartTotalValue = document.getElementById('cartTotalValue');
+  const cartActions = document.getElementById('cartActions');
+  const checkoutBtn = document.getElementById('checkoutBtn');
+  const checkoutForm = document.getElementById('checkoutForm');
+  const confirmEl = document.getElementById('confirm');
+
+  function openDrawer(){
+    drawer.classList.add('open');
+    scrim.classList.add('open');
+  }
+  function closeDrawer(){
+    drawer.classList.remove('open');
+    scrim.classList.remove('open');
+    checkoutForm.classList.remove('open');
+    confirmEl.classList.remove('show');
+  }
+  cartToggle.addEventListener('click', openDrawer);
+  drawerClose.addEventListener('click', closeDrawer);
+  scrim.addEventListener('click', closeDrawer);
+
+  function priceToNumber(str){
+    return parseFloat(str.replace('$','').replace(',',''));
+  }
+
+  document.querySelectorAll('[data-add]').forEach(btn=>{
+    btn.addEventListener('click', ()=>{
+      const card = btn.closest('.product');
+      const name = card.querySelector('[data-name]').textContent;
+      const meta = card.querySelector('[data-meta]').textContent;
+      const price = card.querySelector('[data-price]').textContent;
+      const existing = cart.find(i=>i.name===name);
+      if(existing){ existing.qty++; }
+      else { cart.push({name, meta, price, qty:1}); }
+      renderCart();
+      openDrawer();
+    });
+  });
+
+  function renderCart(){
+    cartLines.innerHTML = '';
+    if(cart.length === 0){
+      cartLines.innerHTML = '<div class="empty-note">Nothing here yet.</div>';
+      cartTotal.style.display = 'none';
+      cartActions.style.display = 'none';
+      checkoutForm.classList.remove('open');
+      return;
+    }
+    cartTotal.style.display = 'flex';
+    cartActions.style.display = 'block';
+
+    let total = 0;
+    cart.forEach((item, idx)=>{
+      const lineTotal = priceToNumber(item.price) * item.qty;
+      total += lineTotal;
+      const div = document.createElement('div');
+      div.className = 'cart-line';
+      div.innerHTML = `
+        <div>
+          <div class="cl-name">${item.name}</div>
+          <div class="cl-meta">${item.meta}</div>
+          <div class="cl-qty">
+            <button data-dec="${idx}">−</button>
+            <span>${item.qty}</span>
+            <button data-inc="${idx}">+</button>
+            <span style="margin-left:10px;"><a class="cl-remove" data-rm="${idx}">remove</a></span>
+          </div>
         </div>
-    </section>
+        <div class="cl-price">$${lineTotal.toLocaleString()}</div>
+      `;
+      cartLines.appendChild(div);
+    });
+    cartTotalValue.textContent = '$' + total.toLocaleString();
 
-    <!-- Категории / Направления -->
-    <section id="categories">
-        <h2 class="section-title">Направления поставок</h2>
-        <div class="categories-grid">
-            <div class="category-card">
-                <h4>Напитки и FMCG</h4>
-                <p>Широкий пул эксклюзивных брендов и стабильные каналы сбыта для ритейла.</p>
-            </div>
-            <div class="category-card">
-                <h4>Премиум-товары</h4>
-                <p>Элитные категории продукции с соблюдением строгих стандартов хранения и транспортировки.</p>
-            </div>
-        </div>
-    </section>
+    cartLines.querySelectorAll('[data-inc]').forEach(b=>b.addEventListener('click', ()=>{
+      cart[b.dataset.inc].qty++; renderCart();
+    }));
+    cartLines.querySelectorAll('[data-dec]').forEach(b=>b.addEventListener('click', ()=>{
+      const i = b.dataset.dec;
+      cart[i].qty--;
+      if(cart[i].qty <= 0) cart.splice(i,1);
+      renderCart();
+    }));
+    cartLines.querySelectorAll('[data-rm]').forEach(b=>b.addEventListener('click', ()=>{
+      cart.splice(b.dataset.rm,1); renderCart();
+    }));
+  }
+  renderCart();
 
-    <!-- Секция связи -->
-    <section id="contact">
-        <div class="footer-section">
-            <div class="footer-left">
-                <h2>Начнем сотрудничество?</h2>
-                <p>Оставьте свои контакты, и наш менеджер свяжется с вами для обсуждения деталей оптовых поставок.</p>
-            </div>
-            <div class="footer-right">
-                <form class="form-group" onsubmit="event.preventDefault(); alert('Спасибо! Заявка успешно отправлена.');">
-                    <input type="email" placeholder="Ваш корпоративный email" required>
-                    <button type="submit">Отправить</button>
-                </form>
-            </div>
-        </div>
-    </section>
+  checkoutBtn.addEventListener('click', ()=>{
+    cartActions.style.display = 'none';
+    checkoutForm.classList.add('open');
+  });
+
+  checkoutForm.addEventListener('submit', (e)=>{
+    e.preventDefault();
+    checkoutForm.classList.remove('open');
+    cartLines.style.display = 'none';
+    cartTotal.style.display = 'none';
+    confirmEl.classList.add('show');
+    cart = [];
+  });
+</script>
 
 </body>
 </html>
