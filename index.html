@@ -9,10 +9,10 @@
 <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,600&display=swap" rel="stylesheet">
 <style>
   .stage img{
-  width:100%;
-  height:100%;
-  object-fit:contain;
-}
+    width:100%;
+    height:100%;
+    object-fit:contain;
+  }
 
   :root{
     --bg:#F7F4EF;
@@ -233,39 +233,50 @@
 
   .p-info{
     margin-top:6vh;
-    text-align:center;
+    width:100%;
+    max-width:480px;
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    gap:20px;
+    text-align:left;
     opacity:0;
     transform:translateY(10px);
     transition:opacity 900ms ease 150ms, transform 900ms ease 150ms;
   }
   .p-info.in{opacity:1; transform:translateY(0);}
+
+  .p-info-text{
+    flex:1;
+  }
   .p-name{
     font-weight:600;
-    font-size:clamp(22px,3vw,30px);
+    font-size:clamp(20px,2.6vw,28px);
     letter-spacing:0.01em;
   }
   .p-meta{
-    margin-top:10px;
-    font-size:14px;
+    margin-top:8px;
+    font-size:13px;
     color:rgba(23,20,15,0.55);
     letter-spacing:0.03em;
   }
   .p-price{
-    margin-top:4px;
-    font-size:15px;
+    margin-top:6px;
+    font-size:16px;
     letter-spacing:0.03em;
+    font-weight:600;
   }
   .p-add{
-    margin-top:26px;
     background:var(--ink);
     color:var(--bg);
     border:none;
-    padding:14px 40px;
+    padding:14px 28px;
     font-family:'Fraunces', serif;
     font-size:13px;
     letter-spacing:0.18em;
     text-transform:uppercase;
     cursor:pointer;
+    white-space:nowrap;
     transition:background 350ms ease, transform 250ms ease, letter-spacing 350ms ease;
   }
   .p-add:hover{background:var(--wood-deep); letter-spacing:0.24em;}
@@ -486,52 +497,59 @@
       </svg>
     </div>
     <div class="p-info">
-      <div class="p-name" data-name>Oak Dining Chair</div>
-      <div class="p-meta" data-meta>Solid oak · 46 × 52 × 80 cm</div>
-      <div class="p-price" data-price>$340</div>
+      <div class="p-info-text">
+        <div class="p-name" data-name>Oak Dining Chair</div>
+        <div class="p-meta" data-meta>Solid oak · 46 × 52 × 80 cm</div>
+        <div class="p-price" data-price>$340</div>
+      </div>
       <button class="p-add" data-add>Add</button>
     </div>
   </section>
 
   <!-- CHAIR 2 -->
   <section class="product" data-cat="chairs">
-  <span class="index-tag">Chairs</span>
-  <div class="stage">
-    <img src="IMG_8007.PNG" alt="Wool Lounge Chair">
-  </div>
-  <div class="p-info">
-    <div class="p-name" data-name>Wool Lounge Chair</div>
-    <div class="p-meta" data-meta>Walnut frame, wool upholstery · 70 × 75 × 78 cm</div>
-    <div class="p-price" data-price>$890</div>
-    <button class="p-add" data-add>Add</button>
-  </div>
-</section>
+    <span class="index-tag">Chairs</span>
+    <div class="stage">
+      <img src="IMG_8007.PNG" alt="Wool Lounge Chair">
+    </div>
+    <div class="p-info">
+      <div class="p-info-text">
+        <div class="p-name" data-name>Wool Lounge Chair</div>
+        <div class="p-meta" data-meta>Walnut frame, wool upholstery · 70 × 75 × 78 cm</div>
+        <div class="p-price" data-price>$890</div>
+      </div>
+      <button class="p-add" data-add>Add</button>
+    </div>
+  </section>
 
-
-   <!-- TABLE 1 -->
-  <section class="product" data-cat="chairs">
+  <!-- TABLE 1 -->
+  <section class="product" id="tables" data-cat="tables">
     <span class="index-tag">Tables</span>
     <div class="stage">
       <img src="IMG_8018.PNG" alt="Classic Pedestal Dark Wood Table">
     </div>
     <div class="p-info">
-      <div class="p-name" data-name>Scandinavian Style Coffee Table</div>
-      <div class="p-meta" data-meta>Walnut frame, wool upholstery · 70 × 75 × 78 cm</div>
-      <div class="p-price" data-price>$1190</div>
+      <div class="p-info-text">
+        <div class="p-name" data-name>Scandinavian Style Coffee Table</div>
+        <div class="p-meta" data-meta>Walnut frame, wool upholstery · 70 × 75 × 78 cm</div>
+        <div class="p-price" data-price>$1190</div>
+      </div>
       <button class="p-add" data-add>Add</button>
     </div>
   </section>
 
   <!-- TABLE 2 -->
-  <section class="product" data-cat="chairs">
+  <section class="product" data-cat="tables">
     <span class="index-tag">Tables</span>
     <div class="stage">
       <img src="IMG_8016.PNG" alt="Modern Wooden Leg Dining Table">
     </div>
     <div class="p-info">
-      <div class="p-name" data-name>Modern Wooden Leg Dining Table</div>
-      <div class="p-meta" data-meta>Walnut frame, wool upholstery · 70 × 75 × 78 cm</div>
-      <div class="p-price" data-price>$1490</div>
+      <div class="p-info-text">
+        <div class="p-name" data-name>Modern Wooden Leg Dining Table</div>
+        <div class="p-meta" data-meta>Walnut frame, wool upholstery · 70 × 75 × 78 cm</div>
+        <div class="p-price" data-price>$1490</div>
+      </div>
       <button class="p-add" data-add>Add</button>
     </div>
   </section>
@@ -548,9 +566,11 @@
       </svg>
     </div>
     <div class="p-info">
-      <div class="p-name" data-name>Wardrobe Line</div>
-      <div class="p-meta" data-meta>Oak veneer · 120 × 60 × 200 cm</div>
-      <div class="p-price" data-price>$1,780</div>
+      <div class="p-info-text">
+        <div class="p-name" data-name>Wardrobe Line</div>
+        <div class="p-meta" data-meta>Oak veneer · 120 × 60 × 200 cm</div>
+        <div class="p-price" data-price>$1,780</div>
+      </div>
       <button class="p-add" data-add>Add</button>
     </div>
   </section>
@@ -569,9 +589,11 @@
       </svg>
     </div>
     <div class="p-info">
-      <div class="p-name" data-name>Wardrobe Wide</div>
-      <div class="p-meta" data-meta>Walnut · 180 × 60 × 210 cm</div>
-      <div class="p-price" data-price>$2,640</div>
+      <div class="p-info-text">
+        <div class="p-name" data-name>Wardrobe Wide</div>
+        <div class="p-meta" data-meta>Walnut · 180 × 60 × 210 cm</div>
+        <div class="p-price" data-price>$2,640</div>
+      </div>
       <button class="p-add" data-add>Add</button>
     </div>
   </section>
