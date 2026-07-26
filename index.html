@@ -3,29 +3,32 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Cloudy</title>
+<title>Cloudy — Furniture speaks for itself</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,600&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
 <style>
   :root{
     --bg:#F7F4EF;
+    --paper:#FBF9F4;
     --ink:#17140F;
     --wood:#B08A64;
     --wood-deep:#8C6A48;
+    --wood-line: rgba(140,106,72,0.4);
     --line: rgba(23,20,15,0.14);
     --line-soft: rgba(23,20,15,0.08);
+    --mono: 'IBM Plex Mono', monospace;
+    --serif: 'Fraunces', serif;
     --dur: 900ms;
   }
 
   *{margin:0;padding:0;box-sizing:border-box;}
-
   html{scroll-behavior:smooth;}
 
   body{
     background:var(--bg);
     color:var(--ink);
-    font-family:'Fraunces', serif;
+    font-family:var(--serif);
     font-optical-sizing:auto;
     -webkit-font-smoothing:antialiased;
     overflow-x:hidden;
@@ -33,17 +36,34 @@
 
   @media (prefers-reduced-motion: reduce){
     *{animation-duration:0.01ms !important; transition-duration:0.01ms !important;}
+    html{scroll-behavior:auto;}
   }
 
   ::selection{background:var(--wood); color:var(--bg);}
+
+  a:focus-visible, button:focus-visible, input:focus-visible{
+    outline:2px solid var(--wood-deep);
+    outline-offset:3px;
+  }
+
+  /* ---------- grain texture (signature material cue, used sparingly) ---------- */
+  .grain{
+    position:fixed; inset:0;
+    pointer-events:none;
+    opacity:0.035;
+    z-index:1;
+    mix-blend-mode:multiply;
+  }
 
   /* ---------- scroll gallery ---------- */
   .reel{
     height:100vh;
     overflow-y:scroll;
     scroll-snap-type:y mandatory;
+    position:relative;
+    z-index:2;
   }
-  
+
   section{
     scroll-snap-align:start;
     min-height:100vh;
@@ -53,7 +73,7 @@
     justify-content:center;
     position:relative;
     padding:10vh 5vw;
-    width: 100%;
+    width:100%;
   }
 
   /* ---------- top chrome ---------- */
@@ -89,9 +109,26 @@
     display:flex; align-items:center; justify-content:center;
     opacity:0.85;
     transition:opacity 300ms ease, transform 300ms ease;
+    position:relative;
   }
   .icon-btn:hover{opacity:1; transform:translateY(-1px);}
   .icon-btn svg{width:19px; height:19px;}
+
+  .cart-badge{
+    position:absolute;
+    top:-2px; right:-6px;
+    min-width:16px; height:16px;
+    border-radius:999px;
+    background:var(--ink);
+    color:var(--bg);
+    font-family:var(--mono);
+    font-size:9px;
+    display:flex; align-items:center; justify-content:center;
+    padding:0 3px;
+    transform:scale(0);
+    transition:transform 260ms cubic-bezier(.34,1.56,.64,1);
+  }
+  .cart-badge.show{transform:scale(1);}
 
   .chrome-right{display:flex; align-items:center; gap:22px;}
 
@@ -116,7 +153,7 @@
     border:none;
     background:none;
     outline:none;
-    font-family:'Fraunces', serif;
+    font-family:var(--serif);
     font-size:16px;
     letter-spacing:0.02em;
     color:var(--ink);
@@ -142,16 +179,28 @@
     width:38px; height:38px;
     display:flex; align-items:center; justify-content:center;
     color:var(--ink);
-    opacity:0.55;
+    opacity:0.5;
     transition:opacity 300ms ease, transform 300ms ease;
     position:relative;
   }
-  .dock a:hover{opacity:1; transform:translateX(-3px);}
+  .dock a:hover, .dock a.active{opacity:1; transform:translateX(-3px);}
   .dock a svg{width:26px; height:26px;}
+  .dock a::after{
+    content:'';
+    position:absolute;
+    right:-14px; top:50%;
+    width:4px; height:4px;
+    border-radius:999px;
+    background:var(--wood-deep);
+    transform:translateY(-50%) scale(0);
+    transition:transform 260ms ease;
+  }
+  .dock a.active::after{transform:translateY(-50%) scale(1);}
   .dock a .tip{
     position:absolute;
     right:48px; top:50%; transform:translateY(-50%);
-    font-size:11px; letter-spacing:0.14em; text-transform:uppercase;
+    font-family:var(--mono);
+    font-size:10px; letter-spacing:0.12em; text-transform:uppercase;
     white-space:nowrap;
     opacity:0;
     transition:opacity 250ms ease;
@@ -164,18 +213,18 @@
       transform:translateX(-50%);
       flex-direction:row;
       gap:34px;
-      background:rgba(247,244,239,0.85);
+      background:rgba(247,244,239,0.88);
       backdrop-filter:blur(6px);
       padding:10px 22px;
       border-radius:999px;
     }
     .dock a .tip{display:none;}
+    .dock a::after{right:auto; top:auto; bottom:-10px; left:50%; transform:translateX(-50%) scale(0);}
+    .dock a.active::after{transform:translateX(-50%) scale(1);}
   }
 
   /* ---------- hero ---------- */
-  .hero{
-    text-align:center;
-  }
+  .hero{text-align:center;}
   .hero .mark{
     font-weight:600;
     font-size:clamp(38px, 8vw, 74px);
@@ -189,6 +238,14 @@
     font-size:clamp(15px,2vw,18px);
     color:rgba(23,20,15,0.62);
     letter-spacing:0.01em;
+  }
+  .hero .eyebrow{
+    font-family:var(--mono);
+    font-size:11px;
+    letter-spacing:0.24em;
+    text-transform:uppercase;
+    color:var(--wood-deep);
+    margin-bottom:18px;
   }
   .down{
     position:absolute;
@@ -208,35 +265,48 @@
   .product{
     width:100%;
     max-width:800px;
-    margin: 0 auto;
+    margin:0 auto;
     display:flex;
     flex-direction:column;
     align-items:center;
     justify-content:center;
   }
-  .stage{
-    width:min(45vw, 380px);
+
+  .stage-wrap{
+    position:relative;
+    width:min(52vw, 420px);
     aspect-ratio:1/1;
+    opacity:0;
+    transform:scale(0.92);
+    transition:opacity 1100ms cubic-bezier(.2,.7,.2,1), transform 1100ms cubic-bezier(.2,.7,.2,1);
+  }
+  .stage-wrap.in{opacity:1; transform:scale(1);}
+
+  .stage-backdrop{
+    position:absolute; inset:6%;
+    border-radius:50%;
+    background:radial-gradient(circle at 38% 32%, var(--paper), var(--bg) 72%);
+    box-shadow:inset 0 0 0 1px var(--line-soft);
+  }
+
+  .stage{
+    position:relative;
+    width:100%;
+    height:100%;
     display:flex;
     align-items:center;
     justify-content:center;
-    opacity:0;
-    transform:scale(0.94);
-    transition:opacity 1100ms cubic-bezier(.2,.7,.2,1), transform 1100ms cubic-bezier(.2,.7,.2,1);
+    transition:transform 600ms cubic-bezier(.2,.7,.2,1);
   }
-  .stage.in{opacity:1; transform:scale(1);}
-  .stage img{
-    width:100%;
-    height:100%;
-    object-fit:contain;
-  }
+  .stage-wrap:hover .stage{transform:rotate(-2.5deg) scale(1.03);}
+  .stage svg{width:64%; height:64%; overflow:visible;}
 
   .p-info{
     margin-top:4vh;
     width:100%;
     max-width:480px;
     display:flex;
-    align-items:center;
+    align-items:flex-end;
     justify-content:space-between;
     gap:20px;
     text-align:left;
@@ -246,62 +316,76 @@
   }
   .p-info.in{opacity:1; transform:translateY(0);}
 
-  .p-info-text{
-    flex:1;
-  }
+  .p-info-text{flex:1;}
   .p-name{
     font-weight:600;
     font-size:clamp(18px,2.2vw,24px);
     letter-spacing:0.01em;
   }
+  .p-rule{
+    width:34px; height:2px;
+    background:var(--wood-deep);
+    margin:10px 0 12px;
+  }
   .p-meta{
-    margin-top:6px;
-    font-size:12px;
+    font-family:var(--mono);
+    font-size:11.5px;
     color:rgba(23,20,15,0.55);
-    letter-spacing:0.03em;
+    letter-spacing:0.01em;
+    line-height:1.7;
   }
   .p-price{
-    margin-top:4px;
+    margin-top:8px;
+    font-family:var(--mono);
     font-size:15px;
-    letter-spacing:0.03em;
-    font-weight:600;
+    letter-spacing:0.01em;
+    font-weight:500;
   }
   .p-add{
     background:var(--ink);
     color:var(--bg);
     border:none;
     padding:12px 24px;
-    font-family:'Fraunces', serif;
+    font-family:var(--serif);
     font-size:13px;
     letter-spacing:0.18em;
     text-transform:uppercase;
     cursor:pointer;
     white-space:nowrap;
     transition:background 350ms ease, transform 250ms ease, letter-spacing 350ms ease;
+    position:relative;
+    overflow:hidden;
   }
   .p-add:hover{background:var(--wood-deep); letter-spacing:0.24em;}
   .p-add:active{transform:scale(0.97);}
+  .p-add.added{background:var(--wood-deep);}
 
   .index-tag{
     position:absolute;
     top:8vh; left:6vw;
-    font-size:12px;
-    letter-spacing:0.2em;
+    font-family:var(--mono);
+    font-size:11px;
+    letter-spacing:0.18em;
     color:rgba(23,20,15,0.35);
     text-transform:uppercase;
   }
+  .index-tag span{color:rgba(23,20,15,0.2);}
 
-  /* ---------- about / closing ---------- */
-  .about{
+  /* ---------- no results ---------- */
+  .no-results{
+    display:none;
+    min-height:100vh;
+    align-items:center;
+    justify-content:center;
+    flex-direction:column;
+    gap:10px;
     text-align:center;
-    max-width:640px;
+    scroll-snap-align:start;
   }
-  .about p{
-    font-weight:400;
-    font-style:italic;
-    font-size:clamp(20px,3vw,28px);
-    line-height:1.5;
-  }
+  .no-results.show{display:flex;}
+  .no-results svg{width:44px; height:44px; opacity:0.35; margin-bottom:10px;}
+  .no-results p:first-child{font-weight:600; font-size:18px;}
+  .no-results p:last-child{font-family:var(--mono); font-size:12px; color:rgba(23,20,15,0.5);}
 
   footer{
     min-height:auto;
@@ -311,18 +395,46 @@
     align-items:center;
     gap:10px;
   }
-  footer .fmark{
-    font-weight:600;
-    letter-spacing:0.28em;
-    font-size:13px;
+  footer .fmark{font-weight:600; letter-spacing:0.28em; font-size:13px;}
+  footer .fnote{
+    font-family:var(--mono);
+    font-size:11px;
+    letter-spacing:0.04em;
+    color:rgba(23,20,15,0.4);
+    max-width:280px;
+    text-align:center;
+    line-height:1.6;
   }
   footer .flink{
+    font-family:var(--mono);
     font-size:11px;
-    letter-spacing:0.08em;
+    letter-spacing:0.06em;
     color:rgba(23,20,15,0.4);
     text-decoration:none;
+    margin-top:6px;
   }
   footer .flink:hover{color:rgba(23,20,15,0.7);}
+
+  /* ---------- toast ---------- */
+  .toast{
+    position:fixed;
+    bottom:34px; left:50%;
+    transform:translateX(-50%) translateY(14px);
+    background:var(--ink);
+    color:var(--bg);
+    padding:12px 22px;
+    border-radius:999px;
+    font-family:var(--mono);
+    font-size:12px;
+    letter-spacing:0.03em;
+    opacity:0;
+    pointer-events:none;
+    transition:opacity 300ms ease, transform 300ms ease;
+    z-index:90;
+    display:flex; align-items:center; gap:8px;
+  }
+  .toast.show{opacity:1; transform:translateX(-50%) translateY(0);}
+  .toast svg{width:13px; height:13px; flex-shrink:0;}
 
   /* ---------- cart drawer ---------- */
   .scrim{
@@ -366,28 +478,35 @@
     padding:20px 0;
     border-bottom:1px solid var(--line-soft);
     gap:14px;
+    animation:lineIn 380ms ease;
   }
+  @keyframes lineIn{ from{opacity:0; transform:translateX(8px);} to{opacity:1; transform:translateX(0);} }
   .cart-line .cl-name{font-weight:600; font-size:16px;}
-  .cart-line .cl-meta{font-size:12px; color:rgba(23,20,15,0.5); margin-top:4px;}
-  .cart-line .cl-qty{
-    display:flex; align-items:center; gap:12px; margin-top:10px; font-size:14px;
-  }
+  .cart-line .cl-meta{font-family:var(--mono); font-size:11px; color:rgba(23,20,15,0.5); margin-top:4px;}
+  .cart-line .cl-qty{display:flex; align-items:center; gap:12px; margin-top:10px; font-family:var(--mono); font-size:13px;}
   .cl-qty button{
-    background:none; border:none; cursor:pointer; color:var(--ink); font-size:15px; opacity:0.6;
+    background:none; border:1px solid var(--line); border-radius:50%;
+    width:20px; height:20px; cursor:pointer; color:var(--ink);
+    font-size:13px; opacity:0.7; display:flex; align-items:center; justify-content:center;
+    line-height:0; transition:opacity 200ms ease, border-color 200ms ease;
   }
-  .cl-qty button:hover{opacity:1;}
+  .cl-qty button:hover{opacity:1; border-color:var(--ink);}
   .cl-remove{
     background:none; border:none; cursor:pointer;
-    font-size:11px; letter-spacing:0.05em; color:rgba(23,20,15,0.4);
+    font-family:var(--mono);
+    font-size:11px; letter-spacing:0.03em; color:rgba(23,20,15,0.4);
     text-decoration:underline;
   }
-  .cl-price{font-size:15px; white-space:nowrap;}
+  .cl-remove:hover{color:var(--ink);}
+  .cl-price{font-family:var(--mono); font-size:14px; white-space:nowrap;}
 
   .empty-note{
     color:rgba(23,20,15,0.45);
     font-style:italic;
     padding:30px 0;
+    display:flex; flex-direction:column; gap:6px;
   }
+  .empty-note svg{width:34px; height:34px; opacity:0.4; margin-bottom:6px;}
 
   .cart-total{
     display:flex; justify-content:space-between;
@@ -395,11 +514,11 @@
     border-top:1px solid var(--ink);
     font-weight:600; font-size:16px;
   }
+  .cart-total span:last-child{font-family:var(--mono); font-weight:500;}
 
   .cart-actions{margin-top:34px;}
   .cart-actions .p-add{width:100%;}
 
-  /* checkout inline form */
   .checkout-form{margin-top:30px; display:none; flex-direction:column; gap:22px;}
   .checkout-form.open{display:flex;}
   .field{position:relative;}
@@ -409,22 +528,31 @@
     border-bottom:1px solid var(--line);
     background:none;
     outline:none;
-    font-family:'Fraunces', serif;
+    font-family:var(--serif);
     font-size:15px;
     padding:8px 0 10px;
     color:var(--ink);
     transition:border-color 300ms ease;
   }
   .field input:focus{border-color:var(--ink);}
+  .field input.shake{animation:shake 320ms ease;}
+  @keyframes shake{
+    0%,100%{transform:translateX(0);}
+    25%{transform:translateX(-4px);}
+    75%{transform:translateX(4px);}
+  }
   .field label{
     position:absolute; left:0; top:8px;
-    font-size:15px; color:rgba(23,20,15,0.4);
+    font-family:var(--mono);
+    font-size:13px; color:rgba(23,20,15,0.4);
     transition:all 220ms ease;
     pointer-events:none;
+    text-transform:uppercase;
+    letter-spacing:0.04em;
   }
   .field input:focus + label,
   .field input:not(:placeholder-shown) + label{
-    top:-14px; font-size:11px; letter-spacing:0.06em;
+    top:-14px; font-size:10px; letter-spacing:0.08em;
   }
   .field-row{display:flex; gap:16px;}
   .field-row .field{flex:1;}
@@ -437,36 +565,69 @@
     transition:opacity 900ms ease;
   }
   .confirm.show{display:block; opacity:1;}
+  .confirm .check{
+    width:52px; height:52px;
+    margin:0 auto 20px;
+  }
+  .confirm .check circle{
+    stroke:var(--ink);
+    stroke-width:1.4;
+    fill:none;
+    stroke-dasharray:151;
+    stroke-dashoffset:151;
+    transition:stroke-dashoffset 700ms ease;
+  }
+  .confirm .check path{
+    stroke:var(--ink);
+    stroke-width:2;
+    fill:none;
+    stroke-linecap:round;
+    stroke-linejoin:round;
+    stroke-dasharray:24;
+    stroke-dashoffset:24;
+    transition:stroke-dashoffset 400ms ease 600ms;
+  }
+  .confirm.show .check circle{stroke-dashoffset:0;}
+  .confirm.show .check path{stroke-dashoffset:0;}
   .confirm p:first-child{font-weight:600; font-size:19px; letter-spacing:0.02em;}
-  .confirm p:last-child{margin-top:10px; font-size:13px; color:rgba(23,20,15,0.5);}
+  .confirm p:last-child{margin-top:10px; font-family:var(--mono); font-size:12px; color:rgba(23,20,15,0.5);}
 </style>
 </head>
 <body>
 
+<svg class="grain" aria-hidden="true">
+  <filter id="grainFilter">
+    <feTurbulence type="fractalNoise" baseFrequency="0.9" numOctaves="2" stitchTiles="stitch" result="noise"/>
+    <feColorMatrix in="noise" type="matrix" values="0 0 0 0 0  0 0 0 0 0  0 0 0 0 0  0 0 0 0.6 0"/>
+  </filter>
+  <rect width="100%" height="100%" filter="url(#grainFilter)"/>
+</svg>
+
 <div class="chrome">
   <a href="#hero" class="wordmark" id="wordmark">Cloudy</a>
   <div class="chrome-right">
-    <button class="icon-btn" id="searchToggle" aria-label="Search">
+    <button class="icon-btn" id="searchToggle" aria-label="Search products">
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4"><circle cx="10.5" cy="10.5" r="6.5"/><line x1="15.3" y1="15.3" x2="21" y2="21"/></svg>
     </button>
-    <button class="icon-btn" id="cartToggle" aria-label="Cart">
+    <button class="icon-btn" id="cartToggle" aria-label="Open cart">
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4"><path d="M6 8h12l-1 12H7L6 8z"/><path d="M9 8V6a3 3 0 0 1 6 0v2"/></svg>
+      <span class="cart-badge" id="cartBadge">0</span>
     </button>
   </div>
 </div>
 
 <div class="search-wrap" id="searchWrap">
-  <input type="text" id="searchInput" placeholder="Search" autocomplete="off">
+  <input type="text" id="searchInput" placeholder="Search the collection" autocomplete="off" aria-label="Search products">
 </div>
 
-<nav class="dock" id="dock">
-  <a href="#chairs"><span class="tip">Chairs</span>
+<nav class="dock" id="dock" aria-label="Categories">
+  <a href="#chairs" data-cat="chairs"><span class="tip">Chairs</span>
     <svg viewBox="0 0 100 100" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M28 20v34M72 20v54M28 54h44M28 54l-4 26M72 74l4 6"/></svg>
   </a>
-  <a href="#tables"><span class="tip">Tables</span>
+  <a href="#tables" data-cat="tables"><span class="tip">Tables</span>
     <svg viewBox="0 0 100 100" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M14 34h72M22 34v42M78 34v42"/></svg>
   </a>
-  <a href="#wardrobes"><span class="tip">Wardrobes</span>
+  <a href="#wardrobes" data-cat="wardrobes"><span class="tip">Wardrobes</span>
     <svg viewBox="0 0 100 100" fill="none" stroke="currentColor" stroke-width="2.2"><rect x="24" y="14" width="52" height="72"/><line x1="50" y1="14" x2="50" y2="86"/><circle cx="45" cy="50" r="1.6" fill="currentColor" stroke="none"/><circle cx="55" cy="50" r="1.6" fill="currentColor" stroke="none"/></svg>
   </a>
 </nav>
@@ -474,6 +635,7 @@
 <div class="reel" id="reel">
 
   <section class="hero" id="hero">
+    <div class="eyebrow">Est. solid wood, joined by hand</div>
     <div class="mark">Cloudy</div>
     <div class="tagline">Furniture speaks for itself.</div>
     <div class="down">
@@ -483,14 +645,25 @@
 
   <!-- CHAIR 1 -->
   <section class="product" id="chairs" data-cat="chairs">
-    <span class="index-tag">Chairs</span>
-    <div class="stage">
-      <img src="IMG_8021.PNG" alt="Solid Wood Dining Armchair">
+    <span class="index-tag">Chairs <span>· 01</span></span>
+    <div class="stage-wrap">
+      <div class="stage-backdrop"></div>
+      <div class="stage">
+        <svg viewBox="0 0 200 200" fill="none" stroke="var(--wood-deep)" stroke-width="3.2" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M56 92 L56 176 M144 92 L144 176 M56 176 L48 190 M144 176 L152 190"/>
+          <path d="M56 92 L56 40 Q56 30 68 30 L132 30 Q144 30 144 40 L144 92"/>
+          <path d="M62 44 L62 84 M78 44 L78 84 M94 44 L94 84 M110 44 L110 84 M126 44 L126 84" stroke-width="2" opacity="0.55"/>
+          <path d="M56 92 L144 92" stroke-width="3.6"/>
+          <path d="M40 96 Q30 96 30 106 L30 118" opacity="0.85"/>
+          <path d="M160 96 Q170 96 170 106 L170 118" opacity="0.85"/>
+        </svg>
+      </div>
     </div>
     <div class="p-info">
       <div class="p-info-text">
         <div class="p-name" data-name>Solid Wood Dining Armchair</div>
-        <div class="p-meta" data-meta>Walnut frame, wool upholstery · 70 × 75 × 78 cm</div>
+        <div class="p-rule"></div>
+        <div class="p-meta" data-meta>Walnut · wool upholstery<br>70 × 75 × 78 cm</div>
         <div class="p-price" data-price>$649</div>
       </div>
       <button class="p-add" data-add>Add</button>
@@ -499,14 +672,23 @@
 
   <!-- CHAIR 2 -->
   <section class="product" data-cat="chairs">
-    <span class="index-tag">Chairs</span>
-    <div class="stage">
-      <img src="IMG_8007.PNG" alt="Wool Lounge Chair">
+    <span class="index-tag">Chairs <span>· 02</span></span>
+    <div class="stage-wrap">
+      <div class="stage-backdrop"></div>
+      <div class="stage">
+        <svg viewBox="0 0 200 200" fill="none" stroke="var(--wood-deep)" stroke-width="3.2" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M48 130 Q48 60 100 56 Q152 60 152 130"/>
+          <path d="M40 130 L160 130 Q160 156 140 158 L60 158 Q40 156 40 130 Z" opacity="0.9"/>
+          <path d="M56 158 L46 182 M144 158 L154 182" />
+          <path d="M40 138 L20 150 M160 138 L180 150" opacity="0.85"/>
+        </svg>
+      </div>
     </div>
     <div class="p-info">
       <div class="p-info-text">
         <div class="p-name" data-name>Wool Lounge Chair</div>
-        <div class="p-meta" data-meta>Walnut frame, wool upholstery · 70 × 75 × 78 cm</div>
+        <div class="p-rule"></div>
+        <div class="p-meta" data-meta>Ash frame · bouclé wool<br>82 × 88 × 96 cm</div>
         <div class="p-price" data-price>$890</div>
       </div>
       <button class="p-add" data-add>Add</button>
@@ -515,15 +697,23 @@
 
   <!-- TABLE 1 -->
   <section class="product" id="tables" data-cat="tables">
-    <span class="index-tag">Tables</span>
-    <div class="stage">
-      <img src="IMG_8018.PNG" alt="Classic Pedestal Dark Wood Table">
+    <span class="index-tag">Tables <span>· 01</span></span>
+    <div class="stage-wrap">
+      <div class="stage-backdrop"></div>
+      <div class="stage">
+        <svg viewBox="0 0 200 200" fill="none" stroke="var(--wood-deep)" stroke-width="3.2" stroke-linecap="round" stroke-linejoin="round">
+          <ellipse cx="100" cy="70" rx="70" ry="16"/>
+          <path d="M60 78 L52 150 M140 78 L148 150 M100 84 L100 150"/>
+          <path d="M40 150 L160 150" stroke-width="2.4" opacity="0.6"/>
+        </svg>
+      </div>
     </div>
     <div class="p-info">
       <div class="p-info-text">
-        <div class="p-name" data-name>Scandinavian Style Coffee Table</div>
-        <div class="p-meta" data-meta>Walnut frame, wool upholstery · 70 × 75 × 78 cm</div>
-        <div class="p-price" data-price>$1190</div>
+        <div class="p-name" data-name>Scandinavian Pedestal Coffee Table</div>
+        <div class="p-rule"></div>
+        <div class="p-meta" data-meta>Solid oak · hand-oiled finish<br>90 × 50 × 45 cm</div>
+        <div class="p-price" data-price>$1,190</div>
       </div>
       <button class="p-add" data-add>Add</button>
     </div>
@@ -531,15 +721,23 @@
 
   <!-- TABLE 2 -->
   <section class="product" data-cat="tables">
-    <span class="index-tag">Tables</span>
-    <div class="stage">
-      <img src="IMG_8016.PNG" alt="Modern Wooden Leg Dining Table">
+    <span class="index-tag">Tables <span>· 02</span></span>
+    <div class="stage-wrap">
+      <div class="stage-backdrop"></div>
+      <div class="stage">
+        <svg viewBox="0 0 200 200" fill="none" stroke="var(--wood-deep)" stroke-width="3.2" stroke-linecap="round" stroke-linejoin="round">
+          <rect x="30" y="66" width="140" height="14"/>
+          <path d="M44 80 L38 152 M156 80 L162 152 M84 80 L80 152 M116 80 L120 152"/>
+          <path d="M40 116 L160 116" stroke-width="2.2" opacity="0.55"/>
+        </svg>
+      </div>
     </div>
     <div class="p-info">
       <div class="p-info-text">
-        <div class="p-name" data-name>Modern Wooden Leg Dining Table</div>
-        <div class="p-meta" data-meta>Walnut frame, wool upholstery · 70 × 75 × 78 cm</div>
-        <div class="p-price" data-price>$1490</div>
+        <div class="p-name" data-name>Modern Dining Table</div>
+        <div class="p-rule"></div>
+        <div class="p-meta" data-meta>Solid walnut · mortise &amp; tenon joinery<br>160 × 90 × 76 cm</div>
+        <div class="p-price" data-price>$1,490</div>
       </div>
       <button class="p-add" data-add>Add</button>
     </div>
@@ -547,15 +745,25 @@
 
   <!-- WARDROBE 1 -->
   <section class="product" id="wardrobes" data-cat="wardrobes">
-    <span class="index-tag">Wardrobes</span>
-    <div class="stage">
-      <img src="IMG_8022.PNG" alt="Two-Tone Sliding Wardrobe">
+    <span class="index-tag">Wardrobes <span>· 01</span></span>
+    <div class="stage-wrap">
+      <div class="stage-backdrop"></div>
+      <div class="stage">
+        <svg viewBox="0 0 200 200" fill="none" stroke="var(--wood-deep)" stroke-width="3.2" stroke-linecap="round" stroke-linejoin="round">
+          <rect x="50" y="24" width="100" height="152" rx="2"/>
+          <line x1="100" y1="24" x2="100" y2="176"/>
+          <circle cx="92" cy="98" r="2" fill="var(--wood-deep)" stroke="none"/>
+          <circle cx="108" cy="98" r="2" fill="var(--wood-deep)" stroke="none"/>
+          <path d="M50 60 L150 60 M50 140 L150 140" stroke-width="1.6" opacity="0.35"/>
+        </svg>
+      </div>
     </div>
     <div class="p-info">
       <div class="p-info-text">
         <div class="p-name" data-name>Two-Tone Sliding Wardrobe</div>
-        <div class="p-meta" data-meta>Walnut frame, wool upholstery · 270 × 350 × 95 cm</div>
-        <div class="p-price" data-price>$4499</div>
+        <div class="p-rule"></div>
+        <div class="p-meta" data-meta>Oak &amp; powder-coated steel<br>220 × 60 × 240 cm</div>
+        <div class="p-price" data-price>$4,499</div>
       </div>
       <button class="p-add" data-add>Add</button>
     </div>
@@ -563,32 +771,49 @@
 
   <!-- WARDROBE 2 -->
   <section class="product" data-cat="wardrobes">
-    <span class="index-tag">Wardrobes</span>
-    <div class="stage">
-      <img src="IMG_8023.PNG" alt="Minimalist Tall Storage Unit">
+    <span class="index-tag">Wardrobes <span>· 02</span></span>
+    <div class="stage-wrap">
+      <div class="stage-backdrop"></div>
+      <div class="stage">
+        <svg viewBox="0 0 200 200" fill="none" stroke="var(--wood-deep)" stroke-width="3.2" stroke-linecap="round" stroke-linejoin="round">
+          <rect x="62" y="20" width="76" height="156" rx="2"/>
+          <path d="M62 56 L138 56 M62 92 L138 92 M62 128 L138 128" stroke-width="2" opacity="0.5"/>
+          <circle cx="72" cy="74" r="1.8" fill="var(--wood-deep)" stroke="none"/>
+          <circle cx="72" cy="110" r="1.8" fill="var(--wood-deep)" stroke="none"/>
+          <circle cx="72" cy="146" r="1.8" fill="var(--wood-deep)" stroke="none"/>
+        </svg>
+      </div>
     </div>
     <div class="p-info">
       <div class="p-info-text">
         <div class="p-name" data-name>Minimalist Tall Storage Unit</div>
-        <div class="p-meta" data-meta>Walnut frame, wool upholstery · 220 × 150 × 90 cm</div>
-        <div class="p-price" data-price>$2999</div>
+        <div class="p-rule"></div>
+        <div class="p-meta" data-meta>Ash veneer · brass hardware<br>90 × 45 × 180 cm</div>
+        <div class="p-price" data-price>$2,999</div>
       </div>
       <button class="p-add" data-add>Add</button>
     </div>
   </section>
 
+  <div class="no-results" id="noResults">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4"><circle cx="10.5" cy="10.5" r="6.5"/><line x1="15.3" y1="15.3" x2="21" y2="21"/></svg>
+    <p>Nothing matches that.</p>
+    <p>Try a material, a room, or a piece name.</p>
+  </div>
+
   <footer>
-    <div class="fmark">DISTRIGO</div>
+    <div class="fmark">CLOUDY</div>
+    <div class="fnote">Solid-wood furniture, joined and finished by hand. Every piece ships assembled or with a fitter.</div>
     <a class="flink" href="#hero">back to top</a>
   </footer>
 
 </div>
 
 <div class="scrim" id="scrim"></div>
-<div class="drawer" id="drawer">
+<div class="drawer" id="drawer" role="dialog" aria-label="Shopping cart">
   <div class="drawer-head">
     <h2>Cart</h2>
-    <button class="drawer-close" id="drawerClose">&times;</button>
+    <button class="drawer-close" id="drawerClose" aria-label="Close cart">&times;</button>
   </div>
 
   <div id="cartLines"></div>
@@ -602,91 +827,120 @@
 
   <form class="checkout-form" id="checkoutForm">
     <div class="field">
-      <input type="text" placeholder=" " required>
-      <label>Full name</label>
+      <input type="text" id="fName" placeholder=" " required>
+      <label for="fName">Full name</label>
     </div>
     <div class="field">
-      <input type="text" placeholder=" " required>
-      <label>Address</label>
+      <input type="text" id="fAddress" placeholder=" " required>
+      <label for="fAddress">Address</label>
     </div>
     <div class="field-row">
       <div class="field">
-        <input type="text" placeholder=" " required>
-        <label>City</label>
+        <input type="text" id="fCity" placeholder=" " required>
+        <label for="fCity">City</label>
       </div>
       <div class="field">
-        <input type="text" placeholder=" " required>
-        <label>Postal code</label>
+        <input type="text" id="fPostal" placeholder=" " required>
+        <label for="fPostal">Postal code</label>
       </div>
     </div>
     <div class="field">
-      <input type="text" placeholder=" " required>
-      <label>Card number</label>
+      <input type="text" id="fCard" placeholder=" " inputmode="numeric" maxlength="19" required>
+      <label for="fCard">Card number</label>
     </div>
     <div class="field-row">
       <div class="field">
-        <input type="text" placeholder=" " required>
-        <label>Expiry</label>
+        <input type="text" id="fExpiry" placeholder=" " inputmode="numeric" maxlength="5" required>
+        <label for="fExpiry">Expiry (MM/YY)</label>
       </div>
       <div class="field">
-        <input type="text" placeholder=" " required>
-        <label>CVC</label>
+        <input type="text" id="fCvc" placeholder=" " inputmode="numeric" maxlength="4" required>
+        <label for="fCvc">CVC</label>
       </div>
     </div>
     <button type="submit" class="p-add">Place order</button>
   </form>
 
   <div class="confirm" id="confirm">
+    <svg class="check" viewBox="0 0 60 60">
+      <circle cx="30" cy="30" r="24"/>
+      <path d="M19 31 L27 39 L42 22"/>
+    </svg>
     <p>Order received.</p>
-    <p>Distrigo will be in touch about delivery.</p>
+    <p>Cloudy will be in touch about delivery.</p>
   </div>
+</div>
+
+<div class="toast" id="toast">
+  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 12 L10 18 L20 6"/></svg>
+  <span id="toastText">Added to cart</span>
 </div>
 
 <script>
   // ---- reveal on scroll ----
-  const stages = document.querySelectorAll('.stage');
+  const stageWraps = document.querySelectorAll('.stage-wrap');
   const infos = document.querySelectorAll('.p-info');
   const io = new IntersectionObserver((entries)=>{
-    entries.forEach(e=>{
-      if(e.isIntersecting){
-        e.target.classList.add('in');
-      }
-    });
+    entries.forEach(e=>{ if(e.isIntersecting) e.target.classList.add('in'); });
   }, {threshold:0.4});
-  stages.forEach(s=>io.observe(s));
+  stageWraps.forEach(s=>io.observe(s));
   infos.forEach(s=>io.observe(s));
 
-  // wordmark + dock appear after leaving hero
+  // wordmark + dock appear after leaving hero, and dock tracks active category
   const hero = document.getElementById('hero');
   const wordmark = document.getElementById('wordmark');
   const dock = document.getElementById('dock');
+  const dockLinks = dock.querySelectorAll('a');
+  const sections = document.querySelectorAll('.product[data-cat]');
+
   const heroObs = new IntersectionObserver((entries)=>{
     entries.forEach(e=>{
-      if(e.isIntersecting){
-        wordmark.classList.remove('show');
-        dock.classList.remove('show');
-      } else {
-        wordmark.classList.add('show');
-        dock.classList.add('show');
-      }
+      if(e.isIntersecting){ wordmark.classList.remove('show'); dock.classList.remove('show'); }
+      else { wordmark.classList.add('show'); dock.classList.add('show'); }
     });
   }, {threshold:0.6});
   heroObs.observe(hero);
+
+  const catObs = new IntersectionObserver((entries)=>{
+    entries.forEach(e=>{
+      if(e.isIntersecting){
+        const cat = e.target.dataset.cat;
+        dockLinks.forEach(a=>a.classList.toggle('active', a.dataset.cat === cat));
+      }
+    });
+  }, {threshold:0.55});
+  sections.forEach(s=>catObs.observe(s));
 
   // ---- search ----
   const searchToggle = document.getElementById('searchToggle');
   const searchWrap = document.getElementById('searchWrap');
   const searchInput = document.getElementById('searchInput');
+  const noResults = document.getElementById('noResults');
+
   searchToggle.addEventListener('click', ()=>{
     searchWrap.classList.toggle('open');
     if(searchWrap.classList.contains('open')) searchInput.focus();
   });
-  searchInput.addEventListener('input', ()=>{
+
+  function runSearch(){
     const q = searchInput.value.trim().toLowerCase();
-    document.querySelectorAll('.product').forEach(sec=>{
+    let visible = 0;
+    document.querySelectorAll('.product[data-cat]').forEach(sec=>{
       const name = sec.querySelector('[data-name]').textContent.toLowerCase();
-      sec.style.display = (!q || name.includes(q)) ? '' : 'none';
+      const meta = sec.querySelector('[data-meta]').textContent.toLowerCase();
+      const match = !q || name.includes(q) || meta.includes(q);
+      sec.style.display = match ? '' : 'none';
+      if(match) visible++;
     });
+    noResults.classList.toggle('show', q.length > 0 && visible === 0);
+  }
+  searchInput.addEventListener('input', runSearch);
+
+  document.addEventListener('keydown', (e)=>{
+    if(e.key === 'Escape'){
+      if(searchWrap.classList.contains('open')){ searchWrap.classList.remove('open'); searchInput.value=''; runSearch(); }
+      closeDrawer();
+    }
   });
 
   // ---- cart ----
@@ -702,43 +956,60 @@
   const checkoutBtn = document.getElementById('checkoutBtn');
   const checkoutForm = document.getElementById('checkoutForm');
   const confirmEl = document.getElementById('confirm');
+  const cartBadge = document.getElementById('cartBadge');
+  const toast = document.getElementById('toast');
+  const toastText = document.getElementById('toastText');
 
-  function openDrawer(){
-    drawer.classList.add('open');
-    scrim.classList.add('open');
-  }
+  function openDrawer(){ drawer.classList.add('open'); scrim.classList.add('open'); }
   function closeDrawer(){
-    drawer.classList.remove('open');
-    scrim.classList.remove('open');
-    checkoutForm.classList.remove('open');
-    confirmEl.classList.remove('show');
+    drawer.classList.remove('open'); scrim.classList.remove('open');
+    checkoutForm.classList.remove('open'); confirmEl.classList.remove('show');
+    cartLines.style.display=''; cartTotal.style.display = cart.length ? 'flex':'none';
   }
   cartToggle.addEventListener('click', openDrawer);
   drawerClose.addEventListener('click', closeDrawer);
   scrim.addEventListener('click', closeDrawer);
 
-  function priceToNumber(str){
-    return parseFloat(str.replace('$','').replace(',',''));
+  function priceToNumber(str){ return parseFloat(str.replace(/[$,]/g,'')); }
+
+  function updateBadge(){
+    const count = cart.reduce((s,i)=>s+i.qty, 0);
+    cartBadge.textContent = count;
+    cartBadge.classList.toggle('show', count > 0);
+  }
+
+  let toastTimer;
+  function showToast(name){
+    toastText.textContent = 'Added — ' + name;
+    toast.classList.add('show');
+    clearTimeout(toastTimer);
+    toastTimer = setTimeout(()=>toast.classList.remove('show'), 1900);
   }
 
   document.querySelectorAll('[data-add]').forEach(btn=>{
     btn.addEventListener('click', ()=>{
       const card = btn.closest('.product');
       const name = card.querySelector('[data-name]').textContent;
-      const meta = card.querySelector('[data-meta]').textContent;
+      const meta = card.querySelector('[data-meta]').textContent.replace(/\n/g,' ');
       const price = card.querySelector('[data-price]').textContent;
       const existing = cart.find(i=>i.name===name);
-      if(existing){ existing.qty++; }
-      else { cart.push({name, meta, price, qty:1}); }
+      if(existing){ existing.qty++; } else { cart.push({name, meta, price, qty:1}); }
       renderCart();
-      openDrawer();
+      updateBadge();
+      showToast(name);
+      btn.classList.add('added');
+      const original = btn.textContent;
+      btn.textContent = 'Added ✓';
+      setTimeout(()=>{ btn.classList.remove('added'); btn.textContent = original; }, 1200);
     });
   });
 
   function renderCart(){
     cartLines.innerHTML = '';
     if(cart.length === 0){
-      cartLines.innerHTML = '<div class="empty-note">Nothing here yet.</div>';
+      cartLines.innerHTML = `<div class="empty-note">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.3"><path d="M6 8h12l-1 12H7L6 8z"/><path d="M9 8V6a3 3 0 0 1 6 0v2"/></svg>
+        Nothing here yet.</div>`;
       cartTotal.style.display = 'none';
       cartActions.style.display = 'none';
       checkoutForm.classList.remove('open');
@@ -758,9 +1029,9 @@
           <div class="cl-name">${item.name}</div>
           <div class="cl-meta">${item.meta}</div>
           <div class="cl-qty">
-            <button data-dec="${idx}">−</button>
+            <button data-dec="${idx}" aria-label="Decrease quantity">−</button>
             <span>${item.qty}</span>
-            <button data-inc="${idx}">+</button>
+            <button data-inc="${idx}" aria-label="Increase quantity">+</button>
             <span style="margin-left:10px;"><a class="cl-remove" data-rm="${idx}">remove</a></span>
           </div>
         </div>
@@ -771,24 +1042,40 @@
     cartTotalValue.textContent = '$' + total.toLocaleString();
 
     cartLines.querySelectorAll('[data-inc]').forEach(b=>b.addEventListener('click', ()=>{
-      cart[b.dataset.inc].qty++; renderCart();
+      cart[b.dataset.inc].qty++; renderCart(); updateBadge();
     }));
     cartLines.querySelectorAll('[data-dec]').forEach(b=>b.addEventListener('click', ()=>{
       const i = b.dataset.dec;
       cart[i].qty--;
       if(cart[i].qty <= 0) cart.splice(i,1);
-      renderCart();
+      renderCart(); updateBadge();
     }));
     cartLines.querySelectorAll('[data-rm]').forEach(b=>b.addEventListener('click', ()=>{
-      cart.splice(b.dataset.rm,1); renderCart();
+      cart.splice(b.dataset.rm,1); renderCart(); updateBadge();
     }));
   }
   renderCart();
+  updateBadge();
 
   checkoutBtn.addEventListener('click', ()=>{
     cartActions.style.display = 'none';
     checkoutForm.classList.add('open');
   });
+
+  // ---- input formatting ----
+  const fCard = document.getElementById('fCard');
+  fCard.addEventListener('input', ()=>{
+    let v = fCard.value.replace(/\D/g,'').slice(0,16);
+    fCard.value = v.replace(/(.{4})/g,'$1 ').trim();
+  });
+  const fExpiry = document.getElementById('fExpiry');
+  fExpiry.addEventListener('input', ()=>{
+    let v = fExpiry.value.replace(/\D/g,'').slice(0,4);
+    if(v.length > 2) v = v.slice(0,2) + '/' + v.slice(2);
+    fExpiry.value = v;
+  });
+  const fCvc = document.getElementById('fCvc');
+  fCvc.addEventListener('input', ()=>{ fCvc.value = fCvc.value.replace(/\D/g,'').slice(0,4); });
 
   checkoutForm.addEventListener('submit', (e)=>{
     e.preventDefault();
@@ -797,6 +1084,7 @@
     cartTotal.style.display = 'none';
     confirmEl.classList.add('show');
     cart = [];
+    updateBadge();
   });
 </script>
 
