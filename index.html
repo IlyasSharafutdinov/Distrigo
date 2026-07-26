@@ -8,12 +8,6 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,600&display=swap" rel="stylesheet">
 <style>
-  .stage img{
-    width:100%;
-    height:100%;
-    object-fit:contain;
-  }
-
   :root{
     --bg:#F7F4EF;
     --ink:#17140F;
@@ -49,6 +43,7 @@
     overflow-y:scroll;
     scroll-snap-type:y mandatory;
   }
+  
   section{
     scroll-snap-align:start;
     min-height:100vh;
@@ -57,7 +52,8 @@
     align-items:center;
     justify-content:center;
     position:relative;
-    padding:8vh 6vw;
+    padding:10vh 5vw;
+    width: 100%;
   }
 
   /* ---------- top chrome ---------- */
@@ -211,14 +207,15 @@
   /* ---------- product sections ---------- */
   .product{
     width:100%;
-    max-width:980px;
+    max-width:800px;
+    margin: 0 auto;
     display:flex;
     flex-direction:column;
     align-items:center;
-    gap:0;
+    justify-content:center;
   }
   .stage{
-    width:min(60vw, 520px);
+    width:min(45vw, 380px);
     aspect-ratio:1/1;
     display:flex;
     align-items:center;
@@ -228,11 +225,14 @@
     transition:opacity 1100ms cubic-bezier(.2,.7,.2,1), transform 1100ms cubic-bezier(.2,.7,.2,1);
   }
   .stage.in{opacity:1; transform:scale(1);}
-  .stage svg{width:100%; height:100%; stroke:var(--ink); fill:none; stroke-width:1.3;}
-  .stage svg .wood-fill{fill:var(--wood); stroke:none; opacity:0.16;}
+  .stage img{
+    width:100%;
+    height:100%;
+    object-fit:contain;
+  }
 
   .p-info{
-    margin-top:6vh;
+    margin-top:4vh;
     width:100%;
     max-width:480px;
     display:flex;
@@ -251,18 +251,18 @@
   }
   .p-name{
     font-weight:600;
-    font-size:clamp(20px,2.6vw,28px);
+    font-size:clamp(18px,2.2vw,24px);
     letter-spacing:0.01em;
   }
   .p-meta{
-    margin-top:8px;
-    font-size:13px;
+    margin-top:6px;
+    font-size:12px;
     color:rgba(23,20,15,0.55);
     letter-spacing:0.03em;
   }
   .p-price{
-    margin-top:6px;
-    font-size:16px;
+    margin-top:4px;
+    font-size:15px;
     letter-spacing:0.03em;
     font-weight:600;
   }
@@ -270,7 +270,7 @@
     background:var(--ink);
     color:var(--bg);
     border:none;
-    padding:14px 28px;
+    padding:12px 24px;
     font-family:'Fraunces', serif;
     font-size:13px;
     letter-spacing:0.18em;
@@ -439,7 +439,6 @@
   .confirm.show{display:block; opacity:1;}
   .confirm p:first-child{font-weight:600; font-size:19px; letter-spacing:0.02em;}
   .confirm p:last-child{margin-top:10px; font-size:13px; color:rgba(23,20,15,0.5);}
-
 </style>
 </head>
 <body>
@@ -483,7 +482,7 @@
   </section>
 
   <!-- CHAIR 1 -->
-   <section class="product" data-cat="chairs">
+  <section class="product" id="chairs" data-cat="chairs">
     <span class="index-tag">Chairs</span>
     <div class="stage">
       <img src="IMG_8021.PNG" alt="Solid Wood Dining Armchair">
@@ -497,7 +496,6 @@
       <button class="p-add" data-add>Add</button>
     </div>
   </section>
-
 
   <!-- CHAIR 2 -->
   <section class="product" data-cat="chairs">
@@ -548,7 +546,7 @@
   </section>
 
   <!-- WARDROBE 1 -->
-    <section class="product" data-cat="chairs">
+  <section class="product" id="wardrobes" data-cat="wardrobes">
     <span class="index-tag">Wardrobes</span>
     <div class="stage">
       <img src="IMG_8021.PNG" alt="Two-Tone Sliding Wardrobe">
@@ -563,9 +561,8 @@
     </div>
   </section>
 
-
   <!-- WARDROBE 2 -->
-    <section class="product" data-cat="chairs">
+  <section class="product" data-cat="wardrobes">
     <span class="index-tag">Wardrobes</span>
     <div class="stage">
       <img src="IMG_8022.PNG" alt="Minimalist Tall Storage Unit">
@@ -579,8 +576,6 @@
       <button class="p-add" data-add>Add</button>
     </div>
   </section>
-
-
 
   <footer>
     <div class="fmark">DISTRIGO</div>
